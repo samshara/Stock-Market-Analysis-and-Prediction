@@ -1,0 +1,4 @@
+1 Shen, S., Jiang, H., & Zhang, T. (2012). Stock market forecasting using machine learning algorithms.
+2 Abhishek Gupta, Dr. Samidha , D. Sharma - ”Clustering-Classification Based Prediction of Stock Market
+  Future Prediction” - (IJCSIT) International Journal of Computer Science and Information Technologies, Vol. 5
+  (3) , 2014, 2806-2809.
