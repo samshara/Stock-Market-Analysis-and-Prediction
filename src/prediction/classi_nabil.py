@@ -17,7 +17,6 @@ dataframe = pd.read_csv('../../data/signals_nabil.csv', index_col = 0, parse_dat
  
 alldata = ClassificationDataSet(1, 1, nb_classes=3, class_labels = ['hold','sell','buy'])
 inp = dataframe[['madiff','signal']]
-inp = inp[21:]
 for b,c in inp.values:
     # if c=='hold': c = 0
     # elif c == 'buy': c = 1
