@@ -14,32 +14,31 @@ def load_data_frame(filename):
     dataframe = pd.read_csv('../../data/'+filename, index_col = 0, parse_dates = True)
     return dataframe
 
-def df_to_cds(dataframe):
-    '''conversion from pandas dataframe to ClassificationDataSet of numpy'''
-    alldata = ClassificationDataSet(1,1,nb_classes = 3, class_labels = ['hold', 'sell', 'buy'])
-    inp = dataframe[[' Close Price','signal']]
-    for b,c in inp.values:
-        # if c=='hold': c = 0
-        # elif c == 'buy': c = 1
-        # else: c =2
-        alldata.addSample([b],c)
-    return alldata
     
 def normalize_dataset(dataframe):
     __ = True
 
-def prepare_datasets(alldata, ratio):
+
+def prepare_datasets(lst,dataframe, ratio):
+    '''conversion from pandas dataframe to ClassificationDataSet of numpy'''
+    alldata = ClassificationDataSet(1,1,nb_classes = 2)
+    inp = dataframe[lst]
+    for b,c in inp.values:
+        if c=='up': c = 0
+        elif c == 'down': c = 1
+        else: c =2
+        alldata.addSample([b],c)
     tstdata_temp, trndata_temp = alldata.splitWithProportion( ratio )
     # to convert supervised datasets to classification datasets
-    tstdata = ClassificationDataSet(1, 1, nb_classes=3)
+    tstdata = ClassificationDataSet(1, 1, nb_classes=2)
     for n in range(0, tstdata_temp.getLength()):
         tstdata.addSample( tstdata_temp.getSample(n)[0], tstdata_temp.getSample(n)[1] )
-        trndata = ClassificationDataSet(1, 1, nb_classes=3)
+    trndata = ClassificationDataSet(1, 1, nb_classes=2)
     for n in range(0, trndata_temp.getLength()):
         trndata.addSample( trndata_temp.getSample(n)[0], trndata_temp.getSample(n)[1])
     trndata._convertToOneOfMany()
     tstdata._convertToOneOfMany()
-    return trndata, tstdata
+    return alldata, trndata, tstdata
 
 # if __name__== '__main__':
 #     hdfStore = loadHdf('store.h5')
