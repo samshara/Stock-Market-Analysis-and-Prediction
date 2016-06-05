@@ -1,37 +1,51 @@
+import logging
 import sys
 sys.path.insert(0,'../../src')
 from prediction import prepareInput as pi
-from preprocessing import indicators as indi
-
-from pybrain.utilities           import percentError
-from pybrain.tools.shortcuts     import buildNetwork
+from preprocessing import moreIndicators as indi
+from logger import log as log
+from pybrain.utilities import  percentError
+from pybrain.tools.shortcuts import buildNetwork
 from pybrain.supervised.trainers import BackpropTrainer
-from pybrain.structure.modules   import SoftmaxLayer
-from pybrain.tools.validation    import ModuleValidator, CrossValidator
+from pybrain.structure.modules import SoftmaxLayer
+from pybrain.tools.validation import ModuleValidator, CrossValidator
 from sklearn.metrics import accuracy_score,precision_score, classification_report
 
-df = pi.load_data_frame('signal_trend.csv')
+log.setup_logging()
+logger = logging.getLogger()
+
+df = pi.load_data_frame('sample_trend.csv')
 df.index = range(len(df.index))
 # signal = df['signal']
 # del df['signal']
-df.columns = ['Transictions','Traded_Shares','Traded_Amount','High','Low','Close','signal']
+df.columns = ['Transactions','Traded_Shares','Traded_Amount','High','Low','Close','signal']
 n = 20
 prop = 0.20
+df = indi.EMA(df,n)
 df = indi.RSI(df,n)
+df = indi.MOM(df,n)
 # df_norm = (df-df.mean())/(df.max()-df.min())
 # df_norm['signal'] = signal
+input_features = ['RSI_'+str(n)]#'EMA_'+str(n),'Momentum_'+str(n)]
+output_features = ['signal']
+ds, trndata, tstdata = pi.prepare_datasets(input_features,output_features,df[20:],prop)
 
-ds, trndata, tstdata = pi.prepare_datasets(['RSI_'+str(n),'signal'],df[20:],prop)
-
+logger.info('input features: '+str(input_features)+str(n)+', Output : '+str(output_features))
 
 # build network
-fnn = buildNetwork(trndata.indim, 20, trndata.outdim, outclass = SoftmaxLayer)
+hidden_dim = 20
+logger.info('creating neural network')
+fnn = buildNetwork(trndata.indim, hidden_dim, trndata.outdim, outclass = SoftmaxLayer)
+
+logger.info('creating backprop Trainer')
+# logger.info('neural network:\n'+str(fnn)+'\ninput_dim ='+str(trndata.indim)+', hidden_dim=' + str(hidden_dim) + ', output_dim ='+str(trndata.outdim))
 
 # set up brckprop trainer
 trainer = BackpropTrainer(fnn, dataset = trndata, momentum = 0.01, verbose = True, weightdecay = 0.01 )
 
-modval = ModuleValidator()
+#modval = ModuleValidator()
 
+logger.info('training and testing network')
 ## start training iterations
 # for i in range(100):
 #     error = trainer.trainEpochs(1)
@@ -40,11 +54,10 @@ modval = ModuleValidator()
 #     trnresult = percentError(trainer.testOnClassData(),trndata['class'])
 #     tstresult = percentError(trainer.testOnClassData(dataset = tstdata),tstdata['class'])
 #     print("epoch: %4d"%trainer.totalepochs,"\ntrain error: %5.2f%%"%trnresult,"\ntest error: %5.2f%%"%tstresult)
-
 trainer.trainUntilConvergence(verbose=True,
                               trainingData=trndata,
                               validationData=tstdata,
-                              maxEpochs=15)
+                              maxEpochs=5)
 out = fnn.activateOnDataset(tstdata)
 out = out.argmax(axis = 1)
 
@@ -53,7 +66,7 @@ print(classification_report(tstdata['target'].argmax(axis=1),out,target_names=ta
 print('accuracy= ',accuracy_score(tstdata['target'].argmax(axis=1),out))
 # The precision is the ratio tp / (tp + fp)
 print('precision= ',precision_score(tstdata['target'].argmax(axis=1),out))
-
+logger.info('\n'+classification_report(tstdata['target'].argmax(axis=1),out,target_names=target_names))
 # ## weights of connections
 # print('weights of connections')
 # ## input layer

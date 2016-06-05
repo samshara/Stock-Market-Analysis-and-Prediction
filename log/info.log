@@ -1,0 +1,48 @@
+2016-06-05 18:02:10,531 - root - INFO - input features: ['Momentum_20', 'RSI_20']20, Output : ['signal']
+2016-06-05 18:02:10,531 - root - INFO - creating neural network
+2016-06-05 18:02:10,532 - root - INFO - creating backprop Trainer
+2016-06-05 18:02:10,532 - root - INFO - training and testing network
+2016-06-05 18:02:44,991 - root - INFO - 
+             precision    recall  f1-score   support
+
+         up       0.92      0.91      0.92      1012
+       down       0.92      0.93      0.92      1125
+
+avg / total       0.92      0.92      0.92      2137
+
+2016-06-05 18:03:45,741 - root - INFO - input features: ['Momentum_20']20, Output : ['signal']
+2016-06-05 18:03:45,741 - root - INFO - creating neural network
+2016-06-05 18:03:45,742 - root - INFO - creating backprop Trainer
+2016-06-05 18:03:45,742 - root - INFO - training and testing network
+2016-06-05 18:04:04,891 - root - INFO - 
+             precision    recall  f1-score   support
+
+         up       0.92      0.91      0.91      1012
+       down       0.92      0.93      0.92      1125
+
+avg / total       0.92      0.92      0.92      2137
+
+2016-06-05 18:05:36,168 - root - INFO - input features: ['Momentum_20', 'RSI_20', 'EMA_20']20, Output : ['signal']
+2016-06-05 18:05:36,169 - root - INFO - creating neural network
+2016-06-05 18:05:36,170 - root - INFO - creating backprop Trainer
+2016-06-05 18:05:36,170 - root - INFO - training and testing network
+2016-06-05 18:05:55,416 - root - INFO - 
+             precision    recall  f1-score   support
+
+         up       1.00      0.01      0.02      1012
+       down       0.53      1.00      0.69      1125
+
+avg / total       0.75      0.53      0.37      2137
+
+2016-06-05 18:09:50,800 - root - INFO - input features: ['RSI_20']20, Output : ['signal']
+2016-06-05 18:09:50,801 - root - INFO - creating neural network
+2016-06-05 18:09:50,802 - root - INFO - creating backprop Trainer
+2016-06-05 18:09:50,802 - root - INFO - training and testing network
+2016-06-05 18:10:10,023 - root - INFO - 
+             precision    recall  f1-score   support
+
+         up       0.86      0.72      0.78      1012
+       down       0.78      0.90      0.83      1125
+
+avg / total       0.82      0.81      0.81      2137
+
