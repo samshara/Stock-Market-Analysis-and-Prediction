@@ -1,5 +1,11 @@
+# ignore
 __pycache__/
 data/*
 doc/Diagrams/*
 *.py~
-.emacs.desktop	
+.emacs.desktop
+src/prediction/classi_nabil.py
+
+
+# but not these files
+!data/sample_trend.csv

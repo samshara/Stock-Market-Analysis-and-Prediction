@@ -11,16 +11,23 @@ def load_hdf(filename):
     return stockStore
     
 def load_data_frame(filename):
+    '''load dataframe from csv file'''
     dataframe = pd.read_csv('../../data/'+filename, index_col = 0, parse_dates = True)
     return dataframe
 
     
 def normalize_dataset(dataframe):
+    ''' normalization of datasets'''
     __ = True
 
 
 def prepare_datasets(inp,out,dataframe, ratio):
-    '''conversion from pandas dataframe to ClassificationDataSet of numpy'''
+    '''conversion from pandas dataframe to ClassificationDataSet of numpy
+    parameters:
+    inp: list of names of input features
+    out: list of names of output features(target value)
+    ratio: ratio of dimension of test to train dataset
+    '''
     inp_dim = len(inp)
     out_dim = len(out)
     no_classes = 2

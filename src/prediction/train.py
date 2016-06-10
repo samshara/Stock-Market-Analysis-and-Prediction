@@ -11,24 +11,30 @@ from pybrain.structure.modules import SoftmaxLayer
 from pybrain.tools.validation import ModuleValidator, CrossValidator
 from sklearn.metrics import accuracy_score,precision_score, classification_report
 
+# set up logger
 log.setup_logging()
 logger = logging.getLogger()
-
+# load dataframe from csv file 
 df = pi.load_data_frame('sample_trend.csv')
+# change datetime index to integer index
+# TODO: manage issue with datetime index
 df.index = range(len(df.index))
-# signal = df['signal']
-# del df['signal']
+# change column name to match with indicator calculating module
 df.columns = ['Transactions','Traded_Shares','Traded_Amount','High','Low','Close','signal']
+# setup parameters
+# TODO: use config file for parameter configuration
 n = 20
 prop = 0.20
+# calculate and add indicators to dataframe
 df = indi.EMA(df,n)
 df = indi.RSI(df,n)
 df = indi.MOM(df,n)
-# df_norm = (df-df.mean())/(df.max()-df.min())
-# df_norm['signal'] = signal
+
+# prepate dataset for training and testing
 input_features = ['RSI_'+str(n)]#'EMA_'+str(n),'Momentum_'+str(n)]
 output_features = ['signal']
 ds, trndata, tstdata = pi.prepare_datasets(input_features,output_features,df[20:],prop)
+
 
 logger.info('input features: '+str(input_features)+str(n)+', Output : '+str(output_features))
 
@@ -54,19 +60,26 @@ logger.info('training and testing network')
 #     trnresult = percentError(trainer.testOnClassData(),trndata['class'])
 #     tstresult = percentError(trainer.testOnClassData(dataset = tstdata),tstdata['class'])
 #     print("epoch: %4d"%trainer.totalepochs,"\ntrain error: %5.2f%%"%trnresult,"\ntest error: %5.2f%%"%tstresult)
+
+# train the network until convergence
 trainer.trainUntilConvergence(verbose=True,
                               trainingData=trndata,
                               validationData=tstdata,
                               maxEpochs=5)
+
+# activate network for test data 
 out = fnn.activateOnDataset(tstdata)
+# index of  maximum value gives the class
 out = out.argmax(axis = 1)
 
+# result analysis, uses scikitlearn metrics
 target_names = ['up','down']
 print(classification_report(tstdata['target'].argmax(axis=1),out,target_names=target_names))
 print('accuracy= ',accuracy_score(tstdata['target'].argmax(axis=1),out))
 # The precision is the ratio tp / (tp + fp)
 print('precision= ',precision_score(tstdata['target'].argmax(axis=1),out))
 logger.info('\n'+classification_report(tstdata['target'].argmax(axis=1),out,target_names=target_names))
+
 # ## weights of connections
 # print('weights of connections')
 # ## input layer
