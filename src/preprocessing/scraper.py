@@ -9,21 +9,27 @@ import os
 #stock name and number fetch
 index = 1
 dictionary = {}
+
+print('{}{}{}'.format('Stock Name', 'Stock Symbol', 'Stock Number'))
+stock_symbols = open('stock_symbols.csv', 'w')
+stock_symbols.write('{},{},{}\n'.format('Stock Name', 'Stock Symbol', 'Stock Number'))
+
 while index<13:
     r = requests.get('http://nepalstock.com.np/company/index/'+str(index)+'/stock-name//')
     soup = BeautifulSoup(r.content,'html.parser')
-    print('{}{}{}'.format('Stock Name', 'Stock Symbol', 'Stock Number'))
     for tr in soup.find_all('tr')[2:]:
         try:
             tds = tr.find_all('td')
             tdl = tds[5].select('a[href]')
             tdl = str(tdl)
-            print('{:60.60}{:>20}{:>20}'.format(tds[2].text, tds[3].text, tdl[69:72]))
+            print('{:60.60}{:>20}{:>20}'.format(tds[2].text.strip(), tds[3].text, tdl[69:72]))
             dictionary[tds[3].text]=tdl[69:72]
+            stock_symbols.write('{},{},{}\n'.format(tds[2].text.strip(), tds[3].text, tdl[69:72]))
         except:
             pass
 
     index += 1
+stock_symbols.close()
 
 #static parts
 part1 = ('http://nepalstock.com.np/main/stockwiseprices/index/0/Date/aesc'
@@ -47,13 +53,14 @@ def get(index):
 # create a subdirectory 'data' for storing scrapped data if it is not present.
 if not os.path.exists('../data'):
     os.mkdir('../data')
-    os.chdir('../data')
+os.chdir('../data')
 
 while index<len(dictionary):
     url = get(index)
     r = requests.get(url)
     soup =  BeautifulSoup(r.content,'html.parser')
     f =  open(keys[index]+'.csv','a')
+    print('writing to {}.csv\n'.format(keys[index]))
     f.write("Date,Total Transactions,Traded Shares,TotalTraded Amount,"+
             "Maximum Price,Minimum Price,Closing Price\n")
     for tr in soup.find_all('tr')[2:]:
