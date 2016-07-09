@@ -1,0 +1,14 @@
+#+TITLE: TODO list for project
+* Stock Market Analysis and Prediction
+** TODO CORE [0/7]
+   - [ ] data regularization and normalization
+   - [ ] merge indicator calculation module
+   - [ ] issue with datetime index
+   - [ ] issue with column name
+   - [ ] module for hdfstore
+   - [ ] module to generate stock signals
+   - [ ] simulate for parameter tuning   
+** TODO ADDITIONAL [0/3]
+   - [ ] prepare package of modules
+   - [ ] sphinx documentation
+   - [ ] config file

@@ -2,12 +2,26 @@ import pandas as pd
 from sklearn import preprocessing
 from pybrain.datasets import ClassificationDataSet
 
+__author__ = "Semanta Bhandari"
+__copyright__ = ""
+__credits__ = ["Sameer Rai","Sumit Shrestha","Sankalpa Timilsina"]
+__license__ = ""
+__version__ = "0.1"
+__email__ = "semantabhandari@gmail.com"
+
 # to enable put/append/to_hdf by default store in the table format
 pd.set_option('io.hdf.default_format', 'table')
 
 
 def load_hdf(filename):
-    '''load hdf store. Parameter: hdfstore filename'''
+    '''load hdf store from file.
+
+    Parameters:
+    filename: name of the file of hdfstore
+    
+    Returns: 
+    stockStore: pandas hdfstore(pytable)
+    '''
     stockStore = pd.HDFStore(
         '../../data/' + filename,
         complevel=9,
@@ -16,7 +30,14 @@ def load_hdf(filename):
 
 
 def load_data_frame(filename):
-    '''load dataframe from csv file'''
+    '''load dataframe from csv file
+    
+    Parameters:
+    filename: name of the csv file
+    
+    Returns: 
+    dataframe: pandas dataframe
+    '''
     dataframe = pd.read_csv(
         '../../data/' + filename,
         index_col=0,
@@ -31,10 +52,16 @@ def normalize_dataset(dataframe):
 
 def prepare_datasets(inp, out, dataframe, ratio):
     '''conversion from pandas dataframe to ClassificationDataSet of numpy
-    parameters:
+    Parameters:
     inp: list of names of input features
     out: list of names of output features(target value)
+    dataframe: dataframe of the stock data
     ratio: ratio of dimension of test to train dataset
+
+    Returns: 
+    alldata: dataset for supervised classification
+    trndata: training dataset
+    tstdata: testing dataset
     '''
     inp_dim = len(inp)
     out_dim = len(out)

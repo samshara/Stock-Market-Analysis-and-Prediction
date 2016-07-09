@@ -2,13 +2,20 @@ import os
 import json
 import logging.config
 
+__author__ = "Semanta Bhandari"
+__copyright__ = ""
+__credits__ = ["Sameer Rai","Sumit Shrestha","Sankalpa Timilsina"]
+__license__ = ""
+__version__ = "0.1"
+__email__ = "semantabhandari@gmail.com"
+
 def setup_logging(
     default_path='logging.json', 
     default_level=logging.INFO,
     env_key='LOG_CFG'
 ):
     """Setup logging configuration
-
+    
     """
     path = default_path
     value = os.getenv(env_key, None)

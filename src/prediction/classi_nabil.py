@@ -1,3 +1,4 @@
+# will be removed later
 from pybrain.datasets import ClassificationDataSet
 from pybrain.utilities import percentError
 from pybrain.tools.shortcuts import buildNetwork
@@ -7,6 +8,7 @@ from pybrain.structure.modules import SoftmaxLayer
 from sklearn import preprocessing
 import pandas as pd
 
+# read dataframe from csv file
 dataframe = pd.read_csv(
     '../../data/signals_nabil.csv',
     index_col=0,
@@ -18,6 +20,7 @@ dataframe = pd.read_csv(
 # x_scaled = min_max_scaler.fit_transform(x)
 # dataframe[' Close Price'] = x_scaled
 
+# prepare calssicication dataset
 alldata = ClassificationDataSet(
     1, 1, nb_classes=3, class_labels=[
         'hold', 'sell', 'buy'])

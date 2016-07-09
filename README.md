@@ -1,6 +1,9 @@
-#Stock-Market-Analysis-and-Prediction
+Stock Market Analysis and Prediction
 ====================================
-Stock Market Analysis and Prediction using ANN.
+Stock Market Analysis and Prediction is the project on technical analysis, visualization and prediction using data provided by NEPSE(Nepal Stock Exchange). The core objective of this project is to comparitively analyse the effectiveness of different prediction algorithms on stock market data and provide general insight on this data to user through visualization. The project encompasses the concept of Data Mining, Machine Learning and Statistics.
+
+-------------------------------------------------------------------------------
+
 Requirements:
 -------------
 - python (3.5)

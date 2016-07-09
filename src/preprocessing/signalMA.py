@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sys import argv
 #import indicators
+#TODO: create module for generating stock signal 
 
 ## to enable put/append/to_hdf by default store in the table format 
 pd.set_option('io.hdf.default_format','table')

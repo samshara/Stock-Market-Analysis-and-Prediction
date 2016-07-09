@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 
+#TODO: create module for creating and updating hdf store
+
 ## to enable put/append/to_hdf by default store in the table format 
 pd.set_option('io.hdf.default_format','table')
 # define hdf store
