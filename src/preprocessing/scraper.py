@@ -59,17 +59,16 @@ while index<len(dictionary):
     url = get(index)
     r = requests.get(url)
     soup =  BeautifulSoup(r.content,'html.parser')
-    f =  open(keys[index]+'.csv','a')
-    print('writing to {}.csv\n'.format(keys[index]))
-    f.write("Date,Total Transactions,Traded Shares,TotalTraded Amount,"+
-            "Maximum Price,Minimum Price,Closing Price\n")
-    for tr in soup.find_all('tr')[2:]:
-        tds =  tr.find_all('td')
-        try:
-            f.write("%s,%s,%s,%s,%s,%s,%s\n"
-                    %(tds[1].text, tds[2].text,tds[3].text,tds[4].text,
-                      tds[5].text,tds[6].text,tds[7].text))
-        except:
-            pass
-
+    with open(keys[index]+'.csv','a')as f:
+        print('writing to {}.csv\n'.format(keys[index]))
+        f.write("Date,Total Transactions,Traded Shares,TotalTraded Amount,"+
+                "Maximum Price,Minimum Price,Closing Price\n")
+        for tr in soup.find_all('tr')[2:]:
+            tds =  tr.find_all('td')
+            try:
+                f.write("%s,%s,%s,%s,%s,%s,%s\n"
+                        %(tds[1].text, tds[2].text,tds[3].text,tds[4].text,
+                          tds[5].text,tds[6].text,tds[7].text))
+            except:
+                pass
     index += 1

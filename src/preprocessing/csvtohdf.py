@@ -9,7 +9,7 @@ def csvtohdf(source, destination):
     The hdf5 file is stored in table format.
 """
     try:
-        data = pd.read_csv(source,index_col = 1,parse_dates=True)
+        data = pd.read_csv(source,index_col = 0,parse_dates=True)
     except(FileNotFoundError, IOError):
         print('Wrong file or file path.')
         return
