@@ -75,7 +75,7 @@ def select_features(dataframe):
     dataframe = indi.MOM(dataframe, n)
 
     # prepate dataset for training and testing
-    input_features = ['RSI_' + str(n)]  # 'EMA_'+str(n),'Momentum_'+str(n)]
+    input_features = ['RSI_' + str(n)]#,'EMA_'+str(n)]#'Momentum_'+str(n)]
     output_features = ['signal']
     ds, trndata, tstdata = pi.prepare_datasets(
         input_features, output_features, dataframe[20:], prop)
