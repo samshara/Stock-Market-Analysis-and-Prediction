@@ -1,4 +1,5 @@
 import logging
+import os.path
 import sys
 sys.path.insert(0, '../../src')
 from prediction import prepareInput as pi
@@ -8,6 +9,8 @@ from pybrain.utilities import percentError
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.supervised.trainers import BackpropTrainer
 from pybrain.structure.modules import SoftmaxLayer
+from pybrain.tools.customxml.networkwriter import NetworkWriter
+from pybrain.tools.customxml.networkreader import NetworkReader
 from pybrain.tools.validation import ModuleValidator, CrossValidator
 from sklearn.metrics import accuracy_score, \
     precision_score, classification_report
@@ -18,15 +21,6 @@ __credits__ = ["Sameer Rai","Sumit Shrestha","Sankalpa Timilsina"]
 __license__ = ""
 __version__ = "0.1"
 __email__ = "semantabhandari@gmail.com"
-
-# setup parameters
-# TODO: use config file for parameter configuration
-n = 20
-prop = 0.20
-
-# set up logger
-log.setup_logging()
-logger = logging.getLogger()
 
     
 def load_dataset(stockname):
@@ -84,12 +78,11 @@ def select_features(dataframe):
     logger.info(
         'input features: ' +
         str(input_features) +
-        str(n) +
         ', Output : ' +
         str(output_features))
     return trndata, tstdata
 
-def build_network(trndata, tstdata, hidden_dim):
+def build_network(trndata, tstdata, hidden_dim, fout, load_network):
     '''
     build ANN network with backpropagation trainer
 
@@ -97,6 +90,8 @@ def build_network(trndata, tstdata, hidden_dim):
     trndata: training dataset
     tstdata: testing dataset
     hidden_dim: no of neuron in hidden layer
+    fout: filename to load saved network
+    load_network: True: load network, False: dont load network
 
     Returns:
     fnn: feedforward neural network
@@ -105,11 +100,14 @@ def build_network(trndata, tstdata, hidden_dim):
     # build network
     print('creating neural network...')
     logger.info('creating neural network')
-    fnn = buildNetwork(
-        trndata.indim,
-        hidden_dim,
-        trndata.outdim,
-        outclass=SoftmaxLayer)
+    if(os.path.isfile('ann.xml')):
+        fnn = NetworkReader.readFrom('ann.xml')
+    else:
+        fnn = buildNetwork(
+            trndata.indim,
+            hidden_dim,
+            trndata.outdim,
+            outclass=SoftmaxLayer)
 
     print('creating backprop Trainer...')
     logger.info('creating backprop Trainer')
@@ -151,7 +149,8 @@ def train_network(trndata,tstdata,fnn,trainer):
                                   trainingData=trndata,
                                   validationData=tstdata,
                                   maxEpochs=5)
-
+    NetworkWriter.writeToFile(fnn,'ann.xml')
+    
 def activate_network(tstdata, fnn):
     print('activating network on data')
     # activate network for test data
@@ -178,12 +177,24 @@ def activate_network(tstdata, fnn):
             out,
             target_names=target_names))
 
-#if __name__== '__main__':
-dataframe = load_dataset('sample_trend.csv')
-trndata, tstdata = select_features(dataframe)
-fnn, trainer = build_network(trndata, tstdata, 20)
-train_network(trndata, tstdata, fnn, trainer)
-activate_network(tstdata, fnn)
+if __name__== '__main__':
+    # setup parameters
+    # TODO: use config file for parameter configuration
+    n = 20
+    prop = 0.20
+
+    # set up logger
+    log.setup_logging()
+    logger = logging.getLogger()
+    logger.info('+++++++++++++++++++++++++')
+    logger.info('file: train.py')
+
+    logger.info('init logging..')
+    dataframe = load_dataset('sample_trend.csv')
+    trndata, tstdata = select_features(dataframe)
+    fnn, trainer = build_network(trndata, tstdata, 20, 'ann.xml',1)
+    train_network(trndata, tstdata, fnn, trainer)
+    activate_network(tstdata, fnn)
 
 # ## weights of connections
 # print('weights of connections')

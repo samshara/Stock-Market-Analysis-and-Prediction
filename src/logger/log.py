@@ -31,6 +31,6 @@ def setup_logging(
 if __name__== '__main__':
     setup_logging()
     logger = logging.getLogger()
-    logger.info('abc')
-    logger.error('error goes here')
+    logger.info('checking info ::abc')
+    logger.error('checking error::error goes here')
 

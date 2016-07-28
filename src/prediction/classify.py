@@ -11,7 +11,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.neighbors import KNeighborsClassifier
-
+import pickle
+from datetime import datetime
 
 __author__ = "Semanta Bhandari"
 __copyright__ = ""
@@ -19,6 +20,13 @@ __credits__ = ["Sameer Rai","Sumit Shrestha","Sankalpa Timilsina"]
 __license__ = ""
 __version__ = "0.1"
 __email__ = "semantabhandari@gmail.com"
+
+# set up logger
+log.setup_logging()
+logger = logging.getLogger()
+logger.info('+++++++++++++++++++++++++')
+logger.info('file: classify.py')
+logger.info('setup check')
 
 def load_dataset(stockname):
     '''
@@ -111,9 +119,10 @@ def performRFClass(X_train, y_train, X_test, y_test, parameters, fout, savemodel
     clf.fit(X_train, y_train)
     
     if savemodel == True:
-        fname_out = '{}-{}.pickle'.format(fout, datetime.now())
+        #fname_out = '{}-{}.pickle'.format(fout, datetime.now())
+        fname_out = fout + '.pickle'
         with open(fname_out, 'wb') as f:
-            cPickle.dump(clf, f, -1)    
+            pickle.dump(clf, f, -1)    
     
     accuracy = clf.score(X_test, y_test)
     
@@ -127,9 +136,10 @@ def performKNNClass(X_train, y_train, X_test, y_test, parameters, fout, savemode
     clf.fit(X_train, y_train)
 
     if savemodel == True:
-        fname_out = '{}-{}.pickle'.format(fout, datetime.now())
+        #fname_out = '{}-{}.pickle'.format(fout, datetime.now().date())
+        fname_out = fout+'.pickle'
         with open(fname_out, 'wb') as f:
-            cPickle.dump(clf, f, -1)    
+            pickle.dump(clf, f, -1)    
     
     accuracy = clf.score(X_test, y_test)
     
@@ -145,9 +155,10 @@ def performSVMClass(X_train, y_train, X_test, y_test, parameters, fout, savemode
     clf.fit(X_train, y_train)
 
     if savemodel == True:
-        fname_out = '{}-{}.pickle'.format(fout, datetime.now())
+        #fname_out = '{}-{}.pickle'.format(fout, datetime.now().date())
+        fname_out = fout+'.pickle'
         with open(fname_out, 'wb') as f:
-            cPickle.dump(clf, f, -1)    
+            pickle.dump(clf, f, -1)    
     
     accuracy = clf.score(X_test, y_test)
     
@@ -163,9 +174,10 @@ def performAdaBoostClass(X_train, y_train, X_test, y_test, parameters, fout, sav
     clf.fit(X_train, y_train)
 
     if savemodel == True:
-        fname_out = '{}-{}.pickle'.format(fout, datetime.now())
+        #fname_out = '{}-{}.pickle'.format(fout, datetime.now())
+        fname_out = fout + '.pickle'
         with open(fname_out, 'wb') as f:
-            cPickle.dump(clf, f, -1)    
+            pickle.dump(clf, f, -1)    
     
     accuracy = clf.score(X_test, y_test)
     
@@ -181,20 +193,23 @@ def performDTClass(X_train, y_train, X_test, y_test, parameters, fout, savemodel
     clf.fit(X_train, y_train)
 
     if savemodel == True:
-        fname_out = '{}-{}.pickle'.format(fout, datetime.now())
+        #fname_out = '{}-{}.pickle'.format(fout, datetime.now())
+        fname_out = fout+'.pickle'
         with open(fname_out, 'wb') as f:
-            cPickle.dump(clf, f, -1)    
+            pickle.dump(clf, f, -1)    
     
     accuracy = clf.score(X_test, y_test)
     
     return accuracy
 
-
-names = ['RF', 'DT', 'KNN', 'SVM', 'ADA']
-dataframe = load_dataset('sample_trend.csv')
+#TODO: use hdf datastructure for dataframes
+stockname = 'sample_trend'
+names = ['DT', 'KNN', 'SVM']
+dataframe = load_dataset(stockname+'.csv')
 X_train,y_train,X_test,y_test = prepareDataForClassification(dataframe,1500)
+#acc = performClassification(X_train[20:], y_train[20:], X_test, y_test, 'SVM', None, '../../networks/'+stockname+':svm', 1)
 for name in names:
-    acc = performClassification(X_train[20:], y_train[20:], X_test, y_test, name, None, None, None)
+    acc = performClassification(X_train[20:], y_train[20:], X_test, y_test, name, None, '../../networks/' + stockname + ':' + name, 1)
     print(name, ':', acc)
 
 # output::

@@ -46,3 +46,52 @@ avg / total       0.75      0.53      0.37      2137
 
 avg / total       0.82      0.81      0.81      2137
 
+2016-07-28 07:14:39,829 - root - INFO - checking info ::abc
+2016-07-28 07:14:39,829 - root - ERROR - checking error::error goes here
+2016-07-28 07:16:04,529 - root - INFO - No fast networks available: No module named 'arac'
+2016-07-28 07:16:04,864 - root - INFO - init logging..
+2016-07-28 07:16:05,223 - root - INFO - input features: ['RSI_20']20, Output : ['signal']
+2016-07-28 07:16:05,223 - root - INFO - creating neural network
+2016-07-28 07:16:05,225 - root - INFO - creating backprop Trainer
+2016-07-28 07:16:05,226 - root - INFO - training and testing network
+2016-07-28 07:16:24,132 - root - INFO - 
+             precision    recall  f1-score   support
+
+         up       0.77      0.82      0.80      1012
+       down       0.83      0.78      0.81      1125
+
+avg / total       0.80      0.80      0.80      2137
+
+2016-07-28 07:20:04,465 - root - INFO - +++++++++++++++++++++++++
+2016-07-28 07:20:04,465 - root - INFO - init logging..
+2016-07-28 07:20:04,748 - root - INFO - input features: ['RSI_20'], Output : ['signal']
+2016-07-28 07:20:04,748 - root - INFO - creating neural network
+2016-07-28 07:20:04,750 - root - INFO - creating backprop Trainer
+2016-07-28 07:20:04,750 - root - INFO - training and testing network
+2016-07-28 07:20:23,730 - root - INFO - 
+             precision    recall  f1-score   support
+
+         up       0.84      0.76      0.80      1012
+       down       0.80      0.87      0.83      1125
+
+avg / total       0.82      0.82      0.82      2137
+
+2016-07-28 07:43:04,284 - root - INFO - +++++++++++++++++++++++++
+2016-07-28 07:44:26,283 - root - INFO - +++++++++++++++++++++++++
+2016-07-28 07:44:26,283 - root - INFO - 
+2016-07-28 07:44:26,283 - root - INFO - init logging..
+2016-07-28 07:44:26,545 - root - INFO - input features: ['RSI_20'], Output : ['signal']
+2016-07-28 07:44:26,545 - root - INFO - creating neural network
+2016-07-28 07:44:26,546 - root - INFO - creating backprop Trainer
+2016-07-28 07:44:26,547 - root - INFO - training and testing network
+2016-07-28 07:44:45,164 - root - INFO - 
+             precision    recall  f1-score   support
+
+         up       0.81      0.79      0.80      1012
+       down       0.81      0.83      0.82      1125
+
+avg / total       0.81      0.81      0.81      2137
+2016-07-28 08:05:08,336 - root - INFO - checking info ::abc
+2016-07-28 08:05:08,336 - root - ERROR - checking error::error goes here
+2016-07-28 08:05:56,288 - root - INFO - checking info ::abc
+2016-07-28 08:05:56,288 - root - ERROR - checking error::error goes here
