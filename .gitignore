@@ -1,12 +1,18 @@
 # ignore
-src/__pycache__/
-__pycache__
+#Compiled python modules
+*.pyc
+*.pyo
+#Setuptools distribution folder
+dist/
+build/
+
+#Python egg metadata
+/*.egg-info
+
 data/*
 doc/Diagrams/*
 *.py~
-.emacs.desktop
 src/prediction/classi_nabil.py
-
 
 # but not these files
 !data/sample_trend.csv

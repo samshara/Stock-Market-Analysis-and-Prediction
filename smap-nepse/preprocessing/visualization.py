@@ -108,3 +108,4 @@ def comparision_plot(name,*, cols, plot_kind, start_date=None, end_date=None):
 
 #plot('ACEDBL', cols=['Closing Price', 'Maximum Price'], plot_kind='line',start_date=None, end_date=None)
 comparision_plot(['ACEDBL','NABIL'], cols=['Closing Price'], plot_kind='line')
+comparision_plot(['APEX','HBL'], cols=['Maximum Price'], plot_kind='box')
