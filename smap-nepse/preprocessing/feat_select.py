@@ -22,10 +22,11 @@ def select_kbest_clf(data_frame, target, k=4):
     return feat_scores
 
 df = pd.read_csv("NABIL.csv")
-df.drop(df.columns[[1]], axis=1, inplace=True)
-#print(df.columns)
+df.drop(df.columns[[0,1,9,13]], axis=1, inplace=True)
+df.drop(df.index[:19],inplace=True)
 
-
-kbest_feat = select_kbest_clf(df, 'Signal', k=4)
+kbest_feat = select_kbest_clf(df, 'Updown', k=4)
 kbest_feat = kbest_feat.sort(["F Score", "P Value"], ascending=[False, False])
+print("\nFeature scores using classification method \n")
 print(kbest_feat)
+
