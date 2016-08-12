@@ -19,7 +19,7 @@ def csvtohdf(source, destination):
     data.to_hdf(destination, 'data', mode='w', format='table')
     return
 
-def alltohdf(source, destination='../hdf/'):
+def alltohdf(source, destination='./hdf/'):
     """Performs storing of all .csv file present on source directory in a hdf5
     data format and save in destination folder."""
 
@@ -33,7 +33,7 @@ def alltohdf(source, destination='../hdf/'):
         csvtohdf(file, destination+filename)
     return
 
-def build_hdfstore(source_dir, destination='../hdf/store.h5'):
+def build_hdfstore(source_dir, destination='./hdf/store.h5'):
     """ Creates a hdf5 store of all the csv files present in the source directory.
     The hdf5 store is placed in the destination path.
     param:
@@ -50,6 +50,8 @@ def build_hdfstore(source_dir, destination='../hdf/store.h5'):
     except OSError:
         pass
 
+    os.makedirs(os.path.dirname(destination), exist_ok=True)
+
     os.chdir(source_dir)
     for file in glob.glob("*.csv"):
         print('Appending {}.csv to hdfstore...\n'.format(file))
@@ -60,4 +62,3 @@ def build_hdfstore(source_dir, destination='../hdf/store.h5'):
             return
         data.to_hdf(destination, file.strip('.csv') , mode='a', format='fixed')
     return destination
-
