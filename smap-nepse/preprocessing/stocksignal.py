@@ -1,3 +1,5 @@
+#Generate signals using RSI and CLosing price
+
 import pandas as pd
 import numpy as np 
 
@@ -19,10 +21,27 @@ def signal(df):
 				Signal.append('Hold')
 	return Signal
 
+def updown(df):
+	Updown=[]
+	for i in range(len(df.index)):
+		if (i<1):
+			Updown.append('Nan')
+		else:
+			if (df.iloc[i]['Closing Price'] > df.iloc[i-1]['Closing Price']):
+				Updown.append('Up')
+			elif (df.iloc[i]['Closing Price']<df.iloc[i-1]['Closing Price']):
+				Updown.append('Down')
+			else:
+				Updown.append('Level')
+	return Updown
+
+Updown=updown(df)
 Signal=signal(df)
 df['Signal']=Signal
+df['Updown']=Updown
 df.to_csv('NABIL.csv')
 
+	
 
 
 
@@ -30,5 +49,5 @@ df.to_csv('NABIL.csv')
 
 
 
-	#TODO: RSI fill class values
-	#select features based on RSI
+
+	
