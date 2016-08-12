@@ -1,0 +1,508 @@
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909     up
+2154            52           6376       12235877  1932  1909   1909     up
+2155            52           6376       12235877  1932  1909   1909     up
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['RSI_20', 'Momentum_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-116
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-112': 'bias' -> 'out'>, <FullConnection 'FullConnection-113': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-114': 'hidden0' -> 'out'>, <FullConnection 'FullConnection-115': 'in' -> 'hidden0'>]
+
+input_dim =2, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.0428152827096
+Total error:  0.0360690471005
+Total error:  0.0368723755388
+Total error:  0.0349363349959
+Total error:  0.0366665561659
+Total error:  0.0353224573683
+('train-errors:', '[0.042815 , 0.036069 , 0.036872 , 0.034936 , 0.036667 , 0.035322 ]')
+('valid-errors:', '[0.412667 , 0.034811 , 0.034146 , 0.034395 , 0.033496 , 0.03432  , 0.0334   ]')
+activating network on data
+The Result for 1 day ahead :
+[ 0.7273545  0.2726455] down
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.92      0.91      0.92      1011
+       down       0.92      0.93      0.92      1126
+
+avg / total       0.92      0.92      0.92      2137
+
+accuracy=  0.919981282171
+precision=  0.921447484554
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909     up
+2154            52           6376       12235877  1932  1909   1909     up
+2155            52           6376       12235877  1932  1909   1909    NaN
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['RSI_20', 'Momentum_20'], Output : ['signal']
+creating neural network...n
+feural network:
+FeedForwardNetwork-17
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-13': 'bias' -> 'out'>, <FullConnection 'FullConnection-14': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-15': 'in' -> 'hidden0'>, <FullConnection 'FullConnection-16': 'hidden0' -> 'out'>]
+
+input_dim =2, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.0427676662202
+Total error:  0.0427429525132
+Total error:  0.0427071043185
+Total error:  0.0433026921394
+Total error:  0.0435870786029
+Total error:  0.0418942920076
+('train-errors:', '[0.042768 , 0.042743 , 0.042707 , 0.043303 , 0.043587 , 0.041894 ]')
+('valid-errors:', '[0.179236 , 0.040139 , 0.04129  , 0.043691 , 0.042532 , 0.042198 , 0.040457 ]')
+activating network on data
+The Result for 2 day ahead :
+[ 0.73559311  0.26440689] down
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.88      0.90      0.89      1014
+       down       0.91      0.89      0.90      1123
+
+avg / total       0.90      0.90      0.90      2137
+
+accuracy=  0.89564810482
+precision=  0.909836065574
+
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909    NaN
+2154            52           6376       12235877  1932  1909   1909    NaN
+2155            52           6376       12235877  1932  1909   1909    NaN
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['RSI_20', 'Momentum_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-26
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-22': 'hidden0' -> 'out'>, <FullConnection 'FullConnection-23': 'bias' -> 'out'>, <FullConnection 'FullConnection-24': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-25': 'in' -> 'hidden0'>]
+
+input_dim =2, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.0520260151138
+Total error:  0.0513916738868
+Total error:  0.0518146282974
+Total error:  0.051758429629
+Total error:  0.0511398944535
+Total error:  0.0496869701635
+('train-errors:', '[0.052026 , 0.051392 , 0.051815 , 0.051758 , 0.05114  , 0.049687 ]')
+('valid-errors:', '[0.095901 , 0.049517 , 0.049603 , 0.049472 , 0.050943 , 0.049398 , 0.048693 ]')
+activating network on data
+The Result for 4 day ahead :
+[ 0.55711538  0.44288462] down
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.88      0.85      0.87      1024
+       down       0.87      0.89      0.88      1113
+
+avg / total       0.87      0.87      0.87      2137
+
+accuracy=  0.87365465606
+precision=  0.867480383609
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909     up
+2154            52           6376       12235877  1932  1909   1909     up
+2155            52           6376       12235877  1932  1909   1909     up
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['RSI_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-35
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-31': 'bias' -> 'out'>, <FullConnection 'FullConnection-32': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-33': 'hidden0' -> 'out'>, <FullConnection 'FullConnection-34': 'in' -> 'hidden0'>]
+
+input_dim =1, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.126864311033
+Total error:  0.0949335522698
+Total error:  0.0864490901933
+Total error:  0.0831681701771
+Total error:  0.0813838771739
+Total error:  0.080933511675
+('train-errors:', '[0.126864 , 0.094934 , 0.086449 , 0.083168 , 0.081384 , 0.080934 ]')
+('valid-errors:', '[0.193079 , 0.100318 , 0.089227 , 0.082518 , 0.083682 , 0.084314 , 0.079556 ]')
+activating network on data
+The Result for 1 day ahead :
+[ 0.38166819  0.61833181] up
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.85      0.75      0.80      1011
+       down       0.80      0.88      0.84      1126
+
+avg / total       0.82      0.82      0.82      2137
+
+accuracy=  0.818905007019
+precision=  0.798224374496
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909     up
+2154            52           6376       12235877  1932  1909   1909     up
+2155            52           6376       12235877  1932  1909   1909    NaN
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['RSI_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-44
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-40': 'hidden0' -> 'out'>, <FullConnection 'FullConnection-41': 'bias' -> 'out'>, <FullConnection 'FullConnection-42': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-43': 'in' -> 'hidden0'>]
+
+input_dim =1, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.108546900627
+Total error:  0.083807950263
+Total error:  0.0788740235996
+Total error:  0.0781221938962
+Total error:  0.0781595803807
+Total error:  0.0784090497867
+('train-errors:', '[0.108547 , 0.083808 , 0.078874 , 0.078122 , 0.07816  , 0.078409 ]')
+('valid-errors:', '[0.182263 , 0.088378 , 0.078547 , 0.078749 , 0.076723 , 0.076652 , 0.077196 ]')
+activating network on data
+The Result for 2 day ahead :
+[ 0.40733196  0.59266804] up
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.80      0.81      0.80      1014
+       down       0.82      0.82      0.82      1123
+
+avg / total       0.81      0.81      0.81      2137
+
+accuracy=  0.811417875526
+precision=  0.82315978456
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909    NaN
+2154            52           6376       12235877  1932  1909   1909    NaN
+2155            52           6376       12235877  1932  1909   1909    NaN
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['RSI_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-53
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-49': 'in' -> 'hidden0'>, <FullConnection 'FullConnection-50': 'hidden0' -> 'out'>, <FullConnection 'FullConnection-51': 'bias' -> 'out'>, <FullConnection 'FullConnection-52': 'bias' -> 'hidden0'>]
+
+input_dim =1, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.123763384939
+Total error:  0.0917227323012
+Total error:  0.084302084954
+Total error:  0.0821882365361
+Total error:  0.0807257413321
+Total error:  0.0800167128739
+('train-errors:', '[0.123763 , 0.091723 , 0.084302 , 0.082188 , 0.080726 , 0.080017 ]')
+('valid-errors:', '[0.2136   , 0.097794 , 0.08563  , 0.086407 , 0.080675 , 0.08033  , 0.081812 ]')
+activating network on data
+The Result for 4 day ahead :
+[ 0.46506762  0.53493238] up
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.73      0.87      0.79      1024
+       down       0.86      0.70      0.77      1113
+
+avg / total       0.79      0.78      0.78      2137
+
+accuracy=  0.782405240992
+precision=  0.855263157895
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909     up
+2154            52           6376       12235877  1932  1909   1909     up
+2155            52           6376       12235877  1932  1909   1909     up
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['RSI_20', 'Momentum_20', 'EMA_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-62
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-58': 'bias' -> 'out'>, <FullConnection 'FullConnection-59': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-60': 'hidden0' -> 'out'>, <FullConnection 'FullConnection-61': 'in' -> 'hidden0'>]
+
+input_dim =3, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.129876096063
+Total error:  0.128981382858
+Total error:  0.129172776454
+Total error:  0.128788330942
+Total error:  0.127996760304
+Total error:  0.128358504878
+('train-errors:', '[0.129876 , 0.128981 , 0.129173 , 0.128788 , 0.127997 , 0.128359 ]')
+('valid-errors:', '[0.151033 , 0.125352 , 0.126592 , 0.124876 , 0.125128 , 0.130443 , 0.131902 ]')
+activating network on data
+The Result for 1 day ahead :
+[ 0.46721142  0.53278858] up
+Result on testdata
+/usr/lib/python3.5/site-packages/sklearn/metrics/classification.py:1074: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+             precision    recall  f1-score   support
+
+         up       0.00      0.00      0.00      1011
+       down       0.53      1.00      0.69      1126
+
+avg / total       0.28      0.53      0.36      2137
+
+accuracy=  0.526906878802
+precision=  0.526906878802
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909     up
+2154            52           6376       12235877  1932  1909   1909     up
+2155            52           6376       12235877  1932  1909   1909    NaN
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['RSI_20', 'Momentum_20', 'EMA_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-71
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-67': 'in' -> 'hidden0'>, <FullConnection 'FullConnection-68': 'bias' -> 'out'>, <FullConnection 'FullConnection-69': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-70': 'hidden0' -> 'out'>]
+
+input_dim =3, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.129104505833
+Total error:  0.128003882443
+Total error:  0.127922637949
+Total error:  0.128337782774
+Total error:  0.128083793386
+Total error:  0.128787299446
+('train-errors:', '[0.129105 , 0.128004 , 0.127923 , 0.128338 , 0.128084 , 0.128787 ]')
+('valid-errors:', '[0.261921 , 0.126905 , 0.131221 , 0.125209 , 0.124987 , 0.130578 , 0.130574 ]')
+activating network on data
+The Result for 2 day ahead :
+[ 0.44950294  0.55049706] up
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.00      0.00      0.00      1014
+       down       0.53      1.00      0.69      1123
+
+avg / total       0.28      0.53      0.36      2137
+
+accuracy=  0.525503041647
+precision=  0.525503041647
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909    NaN
+2154            52           6376       12235877  1932  1909   1909    NaN
+2155            52           6376       12235877  1932  1909   1909    NaN
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['RSI_20', 'Momentum_20', 'EMA_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-80
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-76': 'in' -> 'hidden0'>, <FullConnection 'FullConnection-77': 'hidden0' -> 'out'>, <FullConnection 'FullConnection-78': 'bias' -> 'out'>, <FullConnection 'FullConnection-79': 'bias' -> 'hidden0'>]
+
+input_dim =3, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.128537345441
+Total error:  0.126618777424
+Total error:  0.124741270748
+Total error:  0.12603670391
+Total error:  0.127421883031
+Total error:  0.127031126661
+('train-errors:', '[0.128537 , 0.126619 , 0.124741 , 0.126037 , 0.127422 , 0.127031 ]')
+('valid-errors:', '[0.25726  , 0.125096 , 0.124043 , 0.129149 , 0.126781 , 0.127194 , 0.127009 ]')
+activating network on data
+The Result for 4 day ahead :
+[ 0.47318735  0.52681265] up
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       1.00      0.01      0.03      1024
+       down       0.52      1.00      0.69      1113
+
+avg / total       0.75      0.53      0.37      2137
+
+accuracy=  0.527842770239
+precision=  0.524505183789
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909     up
+2154            52           6376       12235877  1932  1909   1909     up
+2155            52           6376       12235877  1932  1909   1909     up
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['Momentum_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-98
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-94': 'hidden0' -> 'out'>, <FullConnection 'FullConnection-95': 'bias' -> 'out'>, <FullConnection 'FullConnection-96': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-97': 'in' -> 'hidden0'>]
+
+input_dim =1, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.0370194411055
+Total error:  0.0350468067069
+Total error:  0.0350779675714
+Total error:  0.0354527191933
+Total error:  0.0348804050456
+Total error:  0.0350265004894
+('train-errors:', '[0.037019 , 0.035047 , 0.035078 , 0.035453 , 0.03488  , 0.035027 ]')
+('valid-errors:', '[0.1244   , 0.034797 , 0.034753 , 0.034008 , 0.033926 , 0.033993 , 0.035456 ]')
+activating network on data
+The Result for 1 day ahead :
+[ 0.81099985  0.18900015] down
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.92      0.92      0.92      1011
+       down       0.92      0.92      0.92      1126
+
+avg / total       0.92      0.92      0.92      2137
+
+accuracy=  0.92044922789
+precision=  0.924511545293
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909     up
+2154            52           6376       12235877  1932  1909   1909     up
+2155            52           6376       12235877  1932  1909   1909    NaN
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['Momentum_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-107
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-103': 'in' -> 'hidden0'>, <FullConnection 'FullConnection-104': 'bias' -> 'out'>, <FullConnection 'FullConnection-105': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-106': 'hidden0' -> 'out'>]
+
+input_dim =1, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.046930994761
+Total error:  0.0439289991525
+Total error:  0.0426985739285
+Total error:  0.042490028639
+Total error:  0.0420927319995
+Total error:  0.0426458063709
+('train-errors:', '[0.046931 , 0.043929 , 0.042699 , 0.04249  , 0.042093 , 0.042646 ]')
+('valid-errors:', '[0.192255 , 0.04262  , 0.041799 , 0.039261 , 0.040433 , 0.041128 , 0.041063 ]')
+activating network on data
+The Result for 2 day ahead :
+[ 0.66944123  0.33055877] down
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.90      0.90      0.90      1014
+       down       0.91      0.91      0.91      1123
+
+avg / total       0.90      0.90      0.90      2137
+
+accuracy=  0.902199344876
+precision=  0.905861456483
+----------------------------------------******-----------------------------------------
+loading dataset...
+      Transactions  Traded_Shares  Traded_Amount  High   Low  Close signal
+2152            52           6376       12235877  1932  1909   1909     up
+2153            52           6376       12235877  1932  1909   1909    NaN
+2154            52           6376       12235877  1932  1909   1909    NaN
+2155            52           6376       12235877  1932  1909   1909    NaN
+2156            48           5309       10105512  1925  1890   1900    NaN
+selecting features...
+input features: ['Momentum_20'], Output : ['signal']
+creating neural network...
+neural network:
+FeedForwardNetwork-116
+   Modules:
+    [<BiasUnit 'bias'>, <LinearLayer 'in'>, <SigmoidLayer 'hidden0'>, <SoftmaxLayer 'out'>]
+   Connections:
+    [<FullConnection 'FullConnection-112': 'hidden0' -> 'out'>, <FullConnection 'FullConnection-113': 'bias' -> 'out'>, <FullConnection 'FullConnection-114': 'bias' -> 'hidden0'>, <FullConnection 'FullConnection-115': 'in' -> 'hidden0'>]
+
+input_dim =1, hidden_dim=20, output_dim =2
+creating backprop Trainer...
+training and testing network
+Total error:  0.056085542811
+Total error:  0.0539025538219
+Total error:  0.052955197219
+Total error:  0.0522986254934
+Total error:  0.0519996135905
+Total error:  0.051365632637
+('train-errors:', '[0.056086 , 0.053903 , 0.052955 , 0.052299 , 0.052    , 0.051366 ]')
+('valid-errors:', '[0.060041 , 0.052905 , 0.050609 , 0.052944 , 0.049952 , 0.049992 , 0.049066 ]')
+activating network on data
+The Result for 4 day ahead :
+[ 0.75326275  0.24673725] down
+Result on testdata
+             precision    recall  f1-score   support
+
+         up       0.86      0.87      0.87      1024
+       down       0.88      0.87      0.88      1113
+
+avg / total       0.87      0.87      0.87      2137
+
+accuracy=  0.871314927468
+precision=  0.88160291439
+----------------------------------------******-----------------------------------------

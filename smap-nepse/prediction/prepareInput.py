@@ -10,7 +10,7 @@ __version__ = "0.1"
 __email__ = "semantabhandari@gmail.com"
 
 # to enable put/append/to_hdf by default store in the table format
-pd.set_option('io.hdf.default_format', 'table')
+#pd.set_option('io.hdf.default_format', 'table')
 
 
 def load_hdf(filename):
@@ -44,6 +44,30 @@ def load_data_frame(filename):
         parse_dates=True)
     return dataframe
 
+def signal_updown(dataframe, window):
+    '''
+    Generate 'up' or 'down' signal as target for analysis
+    
+    Parameters:
+    dataframe: dataframe of data whose signal is to be generated
+    window: signal for n number of days ahead
+    filename: name of csv file to save data
+
+    Returns: dataframe with signal
+    '''
+    signal = []
+    values = dataframe[' Close Price'].values
+    data_mean20 = pd.rolling_mean(dataframe[' Close Price'],window=20)
+    values = data_mean20
+    for i in range(0,len(values)-window):
+        if(values[i+window]>values[i]):
+            signal.append('up')
+        else:
+            signal.append('down')
+    for i in range(window):
+        signal.append('NaN')
+    dataframe['signal'] = signal
+    return dataframe
 
 def normalize_dataset(dataframe):
     ''' normalization of datasets'''
@@ -74,10 +98,10 @@ def prepare_datasets(inp, out, dataframe, ratio):
         d = out.values[i]
         if d == 'up':
             d = 0
-        elif d == 'down':
+        else:# d == 'down':
             d = 1
-        else:
-            d = 2
+        # else:
+        #     d = 2
         alldata.addSample(inp.values[i], d)
     tstdata_temp, trndata_temp = alldata.splitWithProportion(ratio)
     # to convert supervised datasets to classification datasets
@@ -94,8 +118,8 @@ def prepare_datasets(inp, out, dataframe, ratio):
     tstdata._convertToOneOfMany()
     return alldata, trndata, tstdata
 
-# if __name__== '__main__':
-#     hdfStore = loadHdf('store.h5')
-#     df = load_data_frame('signals_nabil')
-#     ds = df_to_cds(df)
-#     trndata, tstdata = prepare_datasets(ds, 0.25)
+if __name__== '__main__':
+    #hdfStore = load_hdf('store.h5')
+    #print(hdfStore)
+    dataframe = load_data_frame('NABIL.csv')
+    print(signal_updown(dataframe, 2)[:10])

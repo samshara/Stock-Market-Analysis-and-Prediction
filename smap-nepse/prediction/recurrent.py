@@ -10,7 +10,7 @@ from pybrain.tools.customxml.networkreader import NetworkReader
 import matplotlib.pyplot as plt
 import os.path
 import sys
-sys.path.insert(0, '../../src')
+sys.path.insert(0, '../../smap-nepse')
 from prediction import prepareInput as pi
 from sklearn import preprocessing
 import numpy as np

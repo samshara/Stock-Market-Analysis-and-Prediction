@@ -1,7 +1,7 @@
 import logging
 import os.path
 import sys
-sys.path.insert(0, '../../src')
+sys.path.insert(0, '../../smap-nepse')
 from prediction import prepareInput as pi
 from preprocessing import moreIndicators as indi
 from logger import log as log
@@ -22,8 +22,14 @@ __license__ = ""
 __version__ = "0.1"
 __email__ = "semantabhandari@gmail.com"
 
-    
-def load_dataset(stockname):
+log.setup_logging()
+logger = logging.getLogger()
+logger.info('+++++++++++++++++++++++++')
+logger.info('file: train.py')
+
+logger.info('init logging..')
+     
+def load_dataset(stockname, window):
     '''
     load dataset from csv filename
 
@@ -38,6 +44,7 @@ def load_dataset(stockname):
     dataframe = pi.load_data_frame(stockname)
     # change datetime index to integer index
     # TODO: manage issue with datetime index
+    dataframe = pi.signal_updown(dataframe, window)
     dataframe.index = range(len(dataframe.index))
     # change column name to match with indicator calculating module
     dataframe.columns = [
@@ -50,7 +57,7 @@ def load_dataset(stockname):
         'signal']
     return dataframe
 
-def select_features(dataframe):
+def select_features(dataframe, n, prop, features):
     '''
     select input and output features to prepate training and testing dataset
     
@@ -67,12 +74,12 @@ def select_features(dataframe):
     dataframe = indi.EMA(dataframe, n)
     dataframe = indi.RSI(dataframe, n)
     dataframe = indi.MOM(dataframe, n)
-
     # prepate dataset for training and testing
-    input_features = ['RSI_' + str(n)]#,'EMA_'+str(n)]#'Momentum_'+str(n)]
+    #input_features = ['RSI_' + str(n), 'Momentum_'+str(n)] #'EMA_'+str(n),
+    input_features = [feature+'_'+str(n) for feature in features]
     output_features = ['signal']
     ds, trndata, tstdata = pi.prepare_datasets(
-        input_features, output_features, dataframe[20:], prop)
+        input_features, output_features, dataframe[n:], prop)
 
     print('input features: ' + str(input_features)  +', Output : ' + str(output_features))
     logger.info(
@@ -80,7 +87,7 @@ def select_features(dataframe):
         str(input_features) +
         ', Output : ' +
         str(output_features))
-    return trndata, tstdata
+    return ds, trndata, tstdata
 
 def build_network(trndata, tstdata, hidden_dim, fout, load_network):
     '''
@@ -100,7 +107,7 @@ def build_network(trndata, tstdata, hidden_dim, fout, load_network):
     # build network
     print('creating neural network...')
     logger.info('creating neural network')
-    if(os.path.isfile('ann.xml')):
+    if(os.path.isfile('ann.xml') and load_network == 1):
         fnn = NetworkReader.readFrom('ann.xml')
     else:
         fnn = buildNetwork(
@@ -108,18 +115,13 @@ def build_network(trndata, tstdata, hidden_dim, fout, load_network):
             hidden_dim,
             trndata.outdim,
             outclass=SoftmaxLayer)
-
+    print('neural network:\n'+str(fnn)+'\ninput_dim ='+str(trndata.indim)+', hidden_dim=' + str(hidden_dim) + ', output_dim ='+str(trndata.outdim))
     print('creating backprop Trainer...')
     logger.info('creating backprop Trainer')
-    # logger.info('neural network:\n'+str(fnn)+'\ninput_dim ='+str(trndata.indim)+', hidden_dim=' + str(hidden_dim) + ', output_dim ='+str(trndata.outdim))
+   
      
     # set up brckprop trainer
-    trainer = BackpropTrainer(
-        fnn,
-        dataset=trndata,
-        momentum=0.01,
-        verbose=True,
-        weightdecay=0.01)
+    trainer = BackpropTrainer(fnn, dataset=trndata, momentum=0.01, verbose=True, weightdecay=0.01)
     return fnn, trainer
 
 
@@ -136,10 +138,11 @@ def train_network(trndata,tstdata,fnn,trainer):
     print('training and testing network')
     logger.info('training and testing network')
     # start training iterations
-    # for i in range(100):
+    # for i in range(10):
     #     error = trainer.trainEpochs(1)
-    #     #cv = CrossValidator( trainer, trndata, n_folds=5, valfunc=modval.MSE )
-    #     #print("MSE %f @ %i" %( cv.validate(), i ))
+    #     # cv = CrossValidator( trainer, trndata, n_folds=5)  
+    #     # CrossValidator.validate(cv)
+    #     # print("MSE %f @ %i" %( cv.validate(), i ))
     #     trnresult = percentError(trainer.testOnClassData(),trndata['class'])
     #     tstresult = percentError(trainer.testOnClassData(dataset = tstdata),tstdata['class'])
     #     print("epoch: %4d"%trainer.totalepochs,"\ntrain error: %5.2f%%"%trnresult,"\ntest error: %5.2f%%"%tstresult)
@@ -149,17 +152,20 @@ def train_network(trndata,tstdata,fnn,trainer):
                                   trainingData=trndata,
                                   validationData=tstdata,
                                   maxEpochs=5)
-    NetworkWriter.writeToFile(fnn,'ann.xml')
+    # NetworkWriter.writeToFile(fnn,'ann.xml')  
     
-def activate_network(tstdata, fnn):
+def activate_network(ds, tstdata, fnn, nhorizon):
     print('activating network on data')
     # activate network for test data
     out = fnn.activateOnDataset(tstdata)
     # index of  maximum value gives the class
     out = out.argmax(axis=1)
-
+    print("The Result for",nhorizon,"day ahead :")
+    nxt = fnn.activate(ds)
+    print(nxt, 'up' if nxt.argmax(axis=0) else 'down')
     # result analysis, uses scikitlearn metrics
     target_names = ['up', 'down']
+    print('Result on testdata')
     print(
         classification_report(
             tstdata['target'].argmax(
@@ -177,24 +183,42 @@ def activate_network(tstdata, fnn):
             out,
             target_names=target_names))
 
-if __name__== '__main__':
-    # setup parameters
-    # TODO: use config file for parameter configuration
-    n = 20
-    prop = 0.20
-
+def ann(csvname, window, prop, neurons, features = ['RSI','Momentum'], nhorizon = 1):
+    # n = 20
+    # prop = 0.20
     # set up logger
-    log.setup_logging()
-    logger = logging.getLogger()
-    logger.info('+++++++++++++++++++++++++')
-    logger.info('file: train.py')
-
-    logger.info('init logging..')
-    dataframe = load_dataset('sample_trend.csv')
-    trndata, tstdata = select_features(dataframe)
-    fnn, trainer = build_network(trndata, tstdata, 20, 'ann.xml',1)
+    dataframe = load_dataset(csvname, nhorizon)
+    print(dataframe[-5:])
+    ds, trndata, tstdata = select_features(dataframe, window, prop, features)
+    predict = []
+    if(ds.indim == 1):
+        predict = ds['input'][-1:]
+    else:
+        predict = ds['input'][:][-1:][0]
+    fnn, trainer = build_network(trndata, tstdata, neurons, 'ann.xml', 0)
     train_network(trndata, tstdata, fnn, trainer)
-    activate_network(tstdata, fnn)
+    activate_network(predict,tstdata, fnn, nhorizon)
+
+ann('signal_trend.csv', 20, 0.25, 20, features = ['Momentum'], nhorizon = 4)
+
+# if __name__== '__main__':       
+#     # setup parameters
+#     # TODO: use config file for parameter configuration
+#     n = 20
+#     prop = 0.20
+
+#     # set up logger
+#     log.setup_logging()
+#     logger = logging.getLogger()
+#     logger.info('+++++++++++++++++++++++++')
+#     logger.info('file: train.py')
+
+#     logger.info('init logging..')
+#     dataframe = load_dataset('sample_trend.csv')
+#     trndata, tstdata = select_features(dataframe,n,prop)
+#     fnn, trainer = build_network(trndata, tstdata, 20, 'ann.xml',0)
+#     train_network(trndata, tstdata, fnn, trainer)
+#    activate_network(tstdata, fnn)
 
 # ## weights of connections
 # print('weights of connections')

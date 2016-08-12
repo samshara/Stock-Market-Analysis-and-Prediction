@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import logging
 import sys
-sys.path.insert(0, '../../src')
+sys.path.insert(0, '../../smap-nepse')
 from prediction import prepareInput as pi
 from preprocessing import moreIndicators as indi
 from logger import log as log
