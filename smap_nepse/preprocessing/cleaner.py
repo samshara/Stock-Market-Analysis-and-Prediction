@@ -1,3 +1,15 @@
+#cleaner.py
+#! /usr/bin/env python3
+"""
+Provides methods to clean raw .csv files.
+
+This module provides functions to clean single .csv files or all .csv files
+present in a given floder. The cleaned .csv files are saved at destination path.
+
+Available functions:
+ -cleancsv: Clean a single .csv file and store it.
+ -cleanall: Clean all .csv files present in a directory and store it.
+"""
 import pandas as pd
 import numpy as np
 import os
@@ -5,7 +17,11 @@ import glob
 
 def cleancsv(source, destination):
     """Removes duplicates,forward fills the missing values based on date attribute
-    from the source data and saves it to destination path."""
+    from the source data and saves it to destination path.
+    Arguments:
+        source: pathname of the sourcefile
+        destination: pathname for the cleaned data.
+"""
 
     try:
         data = pd.read_csv(source,parse_dates=True)
@@ -26,11 +42,15 @@ def cleancsv(source, destination):
     indexed_data = indexed_data.drop('Date', 1)
 
     indexed_data.to_csv(destination, index_label='Date')
-    return
 
-def cleanall(source, destination='../cleaneddata/'):
-    """Performs data cleaning on all .csv files present on the source directory and
-    saves each file in destination folder."""
+
+def cleanall(source, destination='./cleaneddata/'):
+    """Performs data cleaning on all .csv files present on the source directory
+    and saves each file in destination folder.
+    Arguments:
+        source: source directory containing raw data.
+        destination: destination directory to store cleaned data.
+"""
 
     if not os.path.exists(destination):
         os.makedirs(destination)
@@ -40,6 +60,3 @@ def cleanall(source, destination='../cleaneddata/'):
         filename = os.path.basename(file)
         print('Cleaning'+filename+'...\n')
         cleancsv(file, destination+filename)
-    return
-
-cleanall('../data')
