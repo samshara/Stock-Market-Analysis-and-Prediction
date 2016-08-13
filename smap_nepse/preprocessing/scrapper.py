@@ -15,7 +15,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
-def scrapper(path='./rawdata/', **extras):
+def scrapper(path='./rawdata/'):
     """ This function extracts data from wwww.nepalstock.com.np and stores it in
         .csv format.
     Arguments:
@@ -29,7 +29,11 @@ def scrapper(path='./rawdata/', **extras):
     stock_symbols.write('{},{},{}\n'.format('Stock Name', 'Stock Symbol', 'Stock Number'))
 
     while index<13:
-        r = requests.get('http://nepalstock.com.np/company/index/'+str(index)+'/stock-name//')
+        try:
+            r = requests.get('http://nepalstock.com.np/company/index/'+str(index)+'/stock-name//')
+        except requests.ConnectionError as e:
+            print('ConnectionError!!Please check your internet connection and try again.')
+            return
         soup = BeautifulSoup(r.content,'html.parser')
         for tr in soup.find_all('tr')[2:]:
             try:

@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from pandas.tools.plotting import scatter_matrix
 
 plt.style.use('ggplot')
-def plot(name, *, cols=None, plot_kind=None, start_date=None, end_date=None):
+def plot(name, *, cols=[], plot_kind=None, start_date=None, end_date=None):
     """ Plots selected financial data of selected company which ranges over specified
     date range[start_date:end_date]. The plot is as specified by the plot_kind parameter.
     :param
@@ -22,7 +22,7 @@ def plot(name, *, cols=None, plot_kind=None, start_date=None, end_date=None):
 
     plottypes = ['line', 'box', 'hexbin','scatter_matrix']
 
-    if cols is None:
+    if cols is None or not cols:
         cols = header[1:]
     if plot_kind is None:
         plot_kind = 'line'
@@ -68,7 +68,7 @@ def comparision_plot(name,*, cols=None, plot_kind=None, start_date=None, end_dat
 
     plottypes = ['line', 'box']
 
-    if cols is None:
+    if cols is None or not cols:
         cols = header[1:]
     if plot_kind is None:
         plot_kind = 'line'
