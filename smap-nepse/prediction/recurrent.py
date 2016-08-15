@@ -35,7 +35,7 @@ df.columns = [
     'Close',
     'signal']
 
-data = df.Close.values[:500]
+data = df.Close.values[1500:]
 # TODO: write min_max normalization
 # normalization
 # cp = dataframe.pop(' Close Price')
@@ -84,13 +84,14 @@ for dat in data:
 predicted_array = min_max_scaler.inverse_transform(np.array(predicted).reshape(-1,1))
 
 plt.figure()
-# plt.plot(range(0,len(train_errors)),train_errors)
+
 legend_actual, = plt.plot(range(0, len(data)),temp, label = 'actual', linestyle = '--', linewidth = 2)
 legend_predicted, = plt.plot(range(0, len(data)), predicted_array, label = 'predicted', linewidth = 1.5, c='red')
 plt.legend(handles=[legend_actual, legend_predicted])
-# plt.savefig('error.png')
+plt.savefig('error.png')
 plt.show()
 
+#plt.plot(range(0,len(train_errors)),train_errors)
 # plt.xlabel('epoch')
 # plt.ylabel('error')
 # plt.show()

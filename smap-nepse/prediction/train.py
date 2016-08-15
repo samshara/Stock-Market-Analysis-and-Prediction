@@ -188,6 +188,7 @@ def ann(csvname, window, prop, neurons, features = ['RSI','Momentum'], nhorizon 
     # prop = 0.20
     # set up logger
     dataframe = load_dataset(csvname, nhorizon)
+    print(dataframe.describe())
     print(dataframe[-5:])
     ds, trndata, tstdata = select_features(dataframe, window, prop, features)
     predict = []
