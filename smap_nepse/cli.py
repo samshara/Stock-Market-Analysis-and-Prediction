@@ -11,6 +11,7 @@ Usage:
     smap_nepse build_hdfstore <source> [<destination>]
     smap_nepse plot <name> [<cols>...] [--plot_kind=<arg>] [--start_date=<arg> ] [--end_date=<arg>]
     smap_nepse comparision_plot <names>... --col=<arg> --plot_kind=<arg> [--start_date=<arg>] [--end_date=<arg>]
+    smap_nepse ann <source> [<window>] [<prop>] [<neurons>] [<nhorizon>] [<features>...]
     smap_nepse --version
     smap_nepse -h | --help
 
@@ -25,7 +26,8 @@ import inspect
 import os
 
 from smap_nepse import preprocessing
-
+from smap_nepse import prediction
+#import smap_nepse 
 from . import __version__ as VERSION
 
 def is_command(s):
@@ -42,7 +44,7 @@ def get_first(iterable, default=None):
     return default
 
 def dispatch_command(arguments, command):
-    f = getattr(preprocessing, "{}".format(command))
+    f = getattr(smap_nepse, "{}".format(command))
 
     if f.__name__ == 'cleancsv':
         return f(arguments['<source>'], arguments['<destination>'])
@@ -64,6 +66,8 @@ def dispatch_command(arguments, command):
         return f(arguments['<names>'], cols=arguments['--col'],
                  plot_kind=arguments['--plot_kind'], start_date=arguments['--start_date'],
                  end_date=arguments['--end_date'])
+    elif f.__name__ == 'ann':
+        return f(arguments['<source>'],window = arguments['<window>'],prop = arguments['<prop>'], neurons = arguments['<neurons>'], nhorizon = arguments['<nhorizon>'], features = arguments['<features>'])
     else:
         return None
 
@@ -90,7 +94,12 @@ def main():
         Optional('--start_date'): Or(And(str,
                                         lambda n: True if parse(n) else False),None),
         Optional('--end_date'):Or(And(str,lambda n: True if parse(n) else False),None),
-
+        Optional('<window>'):str,
+        Optional('<prop>'):str,
+        Optional('<neurons>'):str,
+        Optional('<features>...'):list,
+        Optional('<nhorizon>'):str,
+        Optional('ann'):bool,
         Optional('scrapper'):bool,
         Optional('cleancsv'):bool,
         Optional('cleanall'):bool,
@@ -102,11 +111,12 @@ def main():
         Optional('--version'):bool,
         Optional('-h'):bool,
         Optional('--help'):bool
+        
     })
-    try:
-        arguments = schema.validate(arguments)
-    except SchemaError as e:
-        exit(e)
+    # try:
+    #     arguments = schema.validate(arguments)
+    # except SchemaError as e:
+    #     exit(e)
     print(arguments)
     command = get_first([k for (k,v) in arguments.items()
                          if (v and is_command(k))])

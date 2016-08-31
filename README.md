@@ -27,13 +27,9 @@ Install:
 
 ### To install the required packages  to virtual environment and setup package:
 	# pip3 install -r requirements.txt
-        # cd <cloned directory>
-        # pip install . (install the package locally)
-        # pip install -e . (install the package with symlink, so that changes in the sources will be immediately available. *Development Version*
+    # cd <cloned directory>
+    # pip install . (install the package locally)
+    # pip install -e . (install the package with symlink, so that changes in the sources will be immediately available. *Development Version*
 
 ### To run the command line interface:
         $ smap_nepse <command> [options] eg. smap_nepse -h
-
-### To run the script 
-	$ cd src/prediction/
-	$ python3 train.py

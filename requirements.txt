@@ -5,10 +5,10 @@ h5py==2.5.0
 matplotlib==1.5.1
 numpy==1.10.4
 pandas==0.17.1
-PyBrain==0.3.3
 python-dateutil==2.5.2
 requests==2.9.1
 requests-oauthlib==0.6.1
 scikit-learn==0.17.1
 scipy==0.17.0
 six==1.10.0
+PyBrain==0.3.3

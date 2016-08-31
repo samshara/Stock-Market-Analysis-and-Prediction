@@ -28,7 +28,8 @@ logger.info('+++++++++++++++++++++++++')
 logger.info('file: classify.py')
 logger.info('setup check')
 
-def load_dataset(stockname):
+
+def load_dataset(stockname, window = 1):
     '''
     load dataset from csv filename
 
@@ -43,6 +44,7 @@ def load_dataset(stockname):
     dataframe = pi.load_data_frame(stockname)
     # change datetime index to integer index
     # TODO: manage issue with datetime index
+    dataframe = pi.signal_updown(dataframe, window)
     dataframe.index = range(len(dataframe.index))
     # change column name to match with indicator calculating module
     dataframe.columns = [
@@ -203,9 +205,9 @@ def performDTClass(X_train, y_train, X_test, y_test, parameters, fout, savemodel
     return accuracy
 
 #TODO: use hdf datastructure for dataframes
-stockname = 'sample_trend'
+stockname = 'NABIL'
 names = ['DT', 'KNN', 'SVM']
-dataframe = load_dataset(stockname+'.csv')
+dataframe = load_dataset('../../data/cleaneddata/'+stockname+'.csv')
 X_train,y_train,X_test,y_test = prepareDataForClassification(dataframe,1500)
 #acc = performClassification(X_train[20:], y_train[20:], X_test, y_test, 'SVM', None, '../../networks/'+stockname+':svm', 1)
 for name in names:

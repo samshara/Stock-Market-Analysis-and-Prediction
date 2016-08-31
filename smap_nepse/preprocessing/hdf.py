@@ -1,27 +1,26 @@
 import pandas as pd
 import numpy as np
 
-#TODO: create module for creating and updating hdf store
-
 ## to enable put/append/to_hdf by default store in the table format 
 pd.set_option('io.hdf.default_format','table')
-# define hdf store
-stockStore = pd.HDFStore('store.h5',complevel=9,complib='blosc')
-# get list of stocknames
-with open('../Data_Cleaner/stockname.txt') as f:
-    stocknames = [line.rstrip('\n') for line in f]
 
-for stockname in stocknames:
-    csvdata = stockname + '.csv'
-    ## read dataframe from csvdata
-    try:
-        df =  pd.read_csv('Stock_Data_Cleaned/'+csvdata, index_col = 0, parse_dates = True)
-        stockStore[stockname] = df
-    except Exception as e:
-        print(stockname + " unable to create dataframe\n" +str(e))
+stockStore = pd.HDFStore('../../data/h5store/store.h5')
 
-# stockStore.append('ACEDBL',df1)
-print(stockStore)
-
-#print(stockStore.keys())
+string1 = ''
+string1 += 'Stock,Start_date,End_date,no_of_data\n'
+for key in stockStore.keys():
+    df = stockStore[key]
+    print(key)
+    length = df.index.size
+    if(length == 0):
+        print('no data')
+    else:
+        start_date = str(df.index[0].date())
+        end_date = str(df.index[-1].date())
+        temp = key[1:]+','+start_date+','+end_date+','+str(length)+'\n'
+        string1 += temp
+print(string1)
+fp = open('infohdf.csv','w')
+fp.write(string1)
+fp.close()
 stockStore.close()

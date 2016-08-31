@@ -1,20 +1,21 @@
 import logging
 import os.path
 import sys
-sys.path.insert(0, '../../smap-nepse')
-from prediction import prepareInput as pi
-from preprocessing import moreIndicators as indi
-from logger import log as log
+#sys.path.insert(0, '../../smap_nepse')
+from smap_nepse.prediction import prepareInput as pi
+#from prediction import prepareInput as pi
+from smap_nepse.preprocessing import moreIndicators as indi
+from smap_nepse.logger import log as log
 from pybrain.utilities import percentError
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.supervised.trainers import BackpropTrainer
-from pybrain.structure.modules import SoftmaxLayer
+from pybrain.structure.modules import SoftmaxLayer, TanhLayer, LinearLayer, SigmoidLayer
 from pybrain.tools.customxml.networkwriter import NetworkWriter
 from pybrain.tools.customxml.networkreader import NetworkReader
 from pybrain.tools.validation import ModuleValidator, CrossValidator
 from sklearn.metrics import accuracy_score, \
-    precision_score, classification_report
-
+    precision_score, classification_report, roc_curve, auc
+import matplotlib.pyplot as plt
 __author__ = "Semanta Bhandari"
 __copyright__ = ""
 __credits__ = ["Sameer Rai","Sumit Shrestha","Sankalpa Timilsina"]
@@ -107,21 +108,17 @@ def build_network(trndata, tstdata, hidden_dim, fout, load_network):
     # build network
     print('creating neural network...')
     logger.info('creating neural network')
-    if(os.path.isfile('ann.xml') and load_network == 1):
-        fnn = NetworkReader.readFrom('ann.xml')
-    else:
-        fnn = buildNetwork(
-            trndata.indim,
-            hidden_dim,
-            trndata.outdim,
-            outclass=SoftmaxLayer)
+    # if(os.path.isfile('ann.xml') and load_network == 1):
+    #     fnn = NetworkReader.readFrom('ann.xml')
+    # else:
+    fnn = buildNetwork(trndata.indim,hidden_dim,trndata.outdim,hiddenclass = SigmoidLayer, outclass=SoftmaxLayer)
     print('neural network:\n'+str(fnn)+'\ninput_dim ='+str(trndata.indim)+', hidden_dim=' + str(hidden_dim) + ', output_dim ='+str(trndata.outdim))
     print('creating backprop Trainer...')
     logger.info('creating backprop Trainer')
    
      
     # set up brckprop trainer
-    trainer = BackpropTrainer(fnn, dataset=trndata, momentum=0.01, verbose=True, weightdecay=0.01)
+    trainer = BackpropTrainer(fnn, dataset=trndata, learningrate = 0.01, momentum=0.01, verbose=True, weightdecay=0.01)
     return fnn, trainer
 
 
@@ -137,7 +134,7 @@ def train_network(trndata,tstdata,fnn,trainer):
     '''
     print('training and testing network')
     logger.info('training and testing network')
-    # start training iterations
+    # # start training iterations
     # for i in range(10):
     #     error = trainer.trainEpochs(1)
     #     # cv = CrossValidator( trainer, trndata, n_folds=5)  
@@ -151,7 +148,7 @@ def train_network(trndata,tstdata,fnn,trainer):
     trainer.trainUntilConvergence(verbose=True,
                                   trainingData=trndata,
                                   validationData=tstdata,
-                                  maxEpochs=5)
+                                  maxEpochs=10)
     # NetworkWriter.writeToFile(fnn,'ann.xml')  
     
 def activate_network(ds, tstdata, fnn, nhorizon):
@@ -159,38 +156,44 @@ def activate_network(ds, tstdata, fnn, nhorizon):
     # activate network for test data
     out = fnn.activateOnDataset(tstdata)
     # index of  maximum value gives the class
-    out = out.argmax(axis=1)
+    predictions = out.argmax(axis=1)
     print("The Result for",nhorizon,"day ahead :")
     nxt = fnn.activate(ds)
     print(nxt, 'up' if nxt.argmax(axis=0) else 'down')
+    actual = tstdata['target'].argmax(axis=1)
+    temp = []
+    for i in range(len(actual)):
+        temp.append((actual[i],predictions[i]))
     # result analysis, uses scikitlearn metrics
     target_names = ['up', 'down']
     print('Result on testdata')
-    print(
-        classification_report(
-            tstdata['target'].argmax(
-                axis=1),
-            out,
-            target_names=target_names))
-    print('accuracy= ', accuracy_score(tstdata['target'].argmax(axis=1), out))
+    print(classification_report(tstdata['target'].argmax(axis=1),predictions,target_names=target_names))
+    print('accuracy= ', accuracy_score(tstdata['target'].argmax(axis=1), predictions))
     # The precision is the ratio tp / (tp + fp)
-    print('precision= ', precision_score(tstdata['target'].argmax(axis=1), out))
-    logger.info(
-        '\n' +
-        classification_report(
-            tstdata['target'].argmax(
-                axis=1),
-            out,
-            target_names=target_names))
+    print('precision= ', precision_score(tstdata['target'].argmax(axis=1), predictions))
+    # logger.info('\n' + classification_report(tstdata['target'].argmax(axis=1),predictions,target_names=target_names))
+    # false_positive_rate, true_positive_rate, thresholds = roc_curve(actual, predictions)
+    # roc_auc = auc(false_positive_rate, true_positive_rate)
+    # plt.title('Receiver Operating Characteristic')
+    # plt.plot(false_positive_rate, true_positive_rate, 'b',label='AUC = %0.2f'% roc_auc)
+    # plt.legend(loc='lower right')
+    # plt.plot([0,1],[0,1],'r--')
+    # plt.xlim([-0.1,1.2])
+    # plt.ylim([-0.1,1.2])
+    # plt.ylabel('True Positive Rate')
+    # plt.xlabel('False Positive Rate')
+    # plt.show()
 
-def ann(csvname, window, prop, neurons, features = ['RSI','Momentum'], nhorizon = 1):
+def ann(csvname, window = 20, prop = 0.25, neurons = 20,  nhorizon = 1, features = ['RSI','Momentum']):
     # n = 20
     # prop = 0.20
     # set up logger
     dataframe = load_dataset(csvname, nhorizon)
-    print(dataframe.describe())
-    print(dataframe[-5:])
+    # print(dataframe.describe())
+    # print(dataframe[-5:])
     ds, trndata, tstdata = select_features(dataframe, window, prop, features)
+    #print(ds.calculateStatistics())
+    # print(ds['target'][:10],ds['class'][:10])
     predict = []
     if(ds.indim == 1):
         predict = ds['input'][-1:]
@@ -200,26 +203,8 @@ def ann(csvname, window, prop, neurons, features = ['RSI','Momentum'], nhorizon 
     train_network(trndata, tstdata, fnn, trainer)
     activate_network(predict,tstdata, fnn, nhorizon)
 
-ann('signal_trend.csv', 20, 0.25, 20, features = ['Momentum'], nhorizon = 4)
-
-# if __name__== '__main__':       
-#     # setup parameters
-#     # TODO: use config file for parameter configuration
-#     n = 20
-#     prop = 0.20
-
-#     # set up logger
-#     log.setup_logging()
-#     logger = logging.getLogger()
-#     logger.info('+++++++++++++++++++++++++')
-#     logger.info('file: train.py')
-
-#     logger.info('init logging..')
-#     dataframe = load_dataset('sample_trend.csv')
-#     trndata, tstdata = select_features(dataframe,n,prop)
-#     fnn, trainer = build_network(trndata, tstdata, 20, 'ann.xml',0)
-#     train_network(trndata, tstdata, fnn, trainer)
-#    activate_network(tstdata, fnn)
+#if __name__ == '__main__':
+ann('../../data/cleaneddata/NABIL.csv', 20, 0.30, 20, nhorizon = 1, features = ['Momentum', 'RSI'])
 
 # ## weights of connections
 # print('weights of connections')

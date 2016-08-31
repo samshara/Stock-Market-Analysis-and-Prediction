@@ -39,7 +39,7 @@ def load_data_frame(filename):
     dataframe: pandas dataframe
     '''
     dataframe = pd.read_csv(
-        '../../data/' + filename,
+        filename,
         index_col=0,
         parse_dates=True)
     return dataframe
@@ -56,8 +56,8 @@ def signal_updown(dataframe, window):
     Returns: dataframe with signal
     '''
     signal = []
-    values = dataframe[' Close Price'].values
-    data_mean20 = pd.rolling_mean(dataframe[' Close Price'],window=20)
+    values = dataframe['Closing Price'].values
+    data_mean20 = pd.rolling_mean(dataframe['Closing Price'],window=20)
     values = data_mean20
     for i in range(0,len(values)-window):
         if(values[i+window]>values[i]):
@@ -103,23 +103,25 @@ def prepare_datasets(inp, out, dataframe, ratio):
         # else:
         #     d = 2
         alldata.addSample(inp.values[i], d)
+    alldata._convertToOneOfMany(bounds=[0,1])
+    tstdata, trndata = alldata.splitWithProportion(ratio)
     tstdata_temp, trndata_temp = alldata.splitWithProportion(ratio)
     # to convert supervised datasets to classification datasets
-    tstdata = trndata = ClassificationDataSet(inp_dim, out_dim, no_classes)
-    for n in range(0, tstdata_temp.getLength()):
-        tstdata.addSample(
-            tstdata_temp.getSample(n)[0],
-            tstdata_temp.getSample(n)[1])
-    for n in range(0, trndata_temp.getLength()):
-        trndata.addSample(
-            trndata_temp.getSample(n)[0],
-            trndata_temp.getSample(n)[1])
-    trndata._convertToOneOfMany()
-    tstdata._convertToOneOfMany()
+    # tstdata = trndata = ClassificationDataSet(inp_dim, out_dim, no_classes)
+    # for n in range(0, tstdata_temp.getLength()):
+    #     tstdata.addSample(
+    #         tstdata_temp.getSample(n)[0],
+    #         tstdata_temp.getSample(n)[1])
+    # for n in range(0, trndata_temp.getLength()):
+    #     trndata.addSample(
+    #         trndata_temp.getSample(n)[0],
+    #         trndata_temp.getSample(n)[1])
+    # trndata._convertToOneOfMany()
+    # tstdata._convertToOneOfMany()
     return alldata, trndata, tstdata
 
 if __name__== '__main__':
     #hdfStore = load_hdf('store.h5')
     #print(hdfStore)
     dataframe = load_data_frame('NABIL.csv')
-    print(signal_updown(dataframe, 2)[:10])
+    print(signal_updown(dataframe, 1)[:10])
