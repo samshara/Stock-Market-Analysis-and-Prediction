@@ -15,11 +15,14 @@ Requirements:
 - beautifulsoup4 (4.4.1)
 - matplotlib (1.5.1)
 - numpy (1.10.4)
-- pandas (0.17.1)
+- pandas (0.18.1)
 - scikit-learn (0.17.1)
 - pybrain(0.3.3)
 - docopt (0.6.2)
 - schema (0.6.2)
+- cufflinks (0.8.2)
+- plotly (1.12.7)
+
 Install:
 --------
 ### clone the repo

@@ -15,7 +15,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
-def scrapper(path='./rawdata/'):
+def scrapper(path='../../data/'):
     """ This function extracts data from wwww.nepalstock.com.np and stores it in
         .csv format.
     Arguments:
@@ -90,3 +90,6 @@ def scrapper(path='./rawdata/'):
                 except:
                     pass
         index += 1
+
+if __name__ == "__main__":
+    scrapper('../../data/')

@@ -3,7 +3,14 @@ import numpy as np
 import csv
 import os
 import matplotlib.pyplot as plt
-from pandas.tools.plotting import scatter_matrix
+import cufflinks as cf
+import plotly
+import plotly.offline as py
+from plotly.offline.offline import _plot_html
+import plotly.graph_objs as go
+from plotly.tools import FigureFactory as FF
+
+cf.set_config_file(world_readable=False,offline=True)
 
 plt.style.use('ggplot')
 def plot(name, *, cols=[], plot_kind=None, start_date=None, end_date=None):
@@ -89,3 +96,51 @@ def comparision_plot(name,*, cols=None, plot_kind=None, start_date=None, end_dat
     ax.set_title('{} Plot of {} of {}.'.format(plot_kind.title(),','.join(cols), ','.join([s.strip('.csv') for s in name])))
     plt.legend(title='Companies', fancybox=True, shadow=True, loc='best')
     plt.show()
+
+def financialplots(filename, plotkind):
+    try:
+        data = pd.read_csv(filename,index_col=0, parse_dates=True)
+    except(FileNotFoundError, IOError):
+        print('Wrong file or file path.')
+        return None
+    if plotkind == 'candlestick':
+        fig = FF.create_candlestick(data['Opening Price'], data['Maximum Price'], data['Minimum Price'], data['Closing Price'],dates=data.index)
+    elif plotkind == 'macd':
+        fig = data['Closing Price'].ta_plot(study='macd', fast_period=12, slow_period=26, signal_period=9, asFigure=True)
+    elif plotkind == 'boll':
+        fig = data['Closing Price'].ta_plot(study='boll',asFigure=True)
+    elif plotkind == 'ohlc':
+        fig = FF.create_ohlc(data['Opening Price'], data['Maximum Price'], data['Minimum Price'], data['Closing Price'],dates=data.index)
+    elif plotkind == 'sma':
+        fig = data['Closing Price'].ta_plot(study='sma', asFigure=True)
+    py.plot(fig,filename='../../plots/'+filename[:-4]+plotkind,validate=False,auto_open=False)
+    #py.plot(fig,image='png',image_width=1200, image_height=800)
+
+def statisticplots(filename, plotkind,columns):
+    try:
+        data = pd.read_csv(filename,index_col=0, parse_dates=True)
+    except(FileNotFoundError, IOError):
+        print('Wrong file or file path.')
+        return None
+    if columns is None or not columns:
+        columns = list(data.columns.values)
+    data = data.ix[:,columns]
+
+    if plotkind == 'scattermatrix':
+        fig = FF.create_scatterplotmatrix(data,diag='box',title='Scattermatrix plot of {}'.format(filename[:-4]))
+    elif  plotkind == 'line':
+        fig = data.iplot(theme='pearl',kind='scatter',title='Line plot of {}.'.format(filename[:-4]),subplots=True,asFigure=True)
+    elif plotkind == 'box':
+        fig = data.iplot(theme='pearl',kind='box',title='Box plot of {}.'.format(filename[:-4]),asFigure=True)
+
+    py.plot(fig,filename='../../plots/'+filename[:-4]+plotkind,validate=False,auto_open=False)
+
+def compare(names,columns):
+    try:
+        data = pd.concat([pd.read_csv(company, index_col=0, parse_dates=True) for company in names], axis=1, keys=names)
+    except(FileNotFoundError, IOError):
+        print('Wrong file or file path.')
+        return None
+    data = data.ix[:,data.columns.get_level_values(1).isin(set(columns))]
+    fig = data.iplot(theme='pearl',kind='scatter',title='Line Plot of {} of {}.'.format(','.join(columns), ','.join([s.strip('.csv') for s in names])),subplots=True,asFigure=True)
+    py.plot(fig,filename='../../plots/'+compareplot,validate=False,auto_open=False)
